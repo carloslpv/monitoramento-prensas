@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import monitoramento_prensas.models.dtos.MaquinaDTO;
 
 import java.time.LocalDateTime;
 
@@ -28,4 +29,17 @@ public class Maquina {
     @Column(name = "data_compra")
     private LocalDateTime dataCompra;
 
+    /**
+     * Retorna um objeto {@link MaquinaDTO} a partir da máquina
+     * @return
+     */
+    public MaquinaDTO toDTO(){
+        return new MaquinaDTO(
+                this.id,
+                this.nome,
+                this.modelo,
+                this.fabricante,
+                this.dataCompra
+        );
+    }
 }
