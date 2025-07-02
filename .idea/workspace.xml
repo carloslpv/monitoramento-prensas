@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3a63010-ef27-4f07-8055-258d65fca55f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/monitoramento_prensas/controllers/TelemetriaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/db/migration/2025/07/V.01__CREATE_TABLE_MAQUINAS.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/db/migration/2025/07/V.02__CREATE_TABLE_TELEMETRIA.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/db/migration/2025/07/V.03__CREATE_TABLE_HISTORICO_FALHAS.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/db/migration/2025/07/V.04__CREATE_TABLE_HISTORICO_MANUTENCAO.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/monitoramento_prensas/Application.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/monitoramento_prensas/controllers/TelemetriaController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/monitoramento_prensas/models/Maquina.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,13 +47,14 @@
     "Maven.demo [compile].executor": "Run",
     "Maven.demo [package].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Desenvolvimento/monitoramento-prensas",
+    "last_opened_file_path": "D:/Desenvolvimento/4in/Saude-Escolar",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "MavenSettings"
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
   }
 }]]></component>
   <component name="RecentsManager">
