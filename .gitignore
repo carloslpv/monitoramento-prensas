@@ -1,89 +1,37 @@
-# === Java ===
-*.class
-*.jar
-*.war
-*.ear
-
-# Logs
-*.log
-
-# Compiled files
+HELP.md
 target/
-build/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# === Maven ===
-.mvn/
-!**/src/main/**
-!**/src/test/**
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# === Gradle ===
-.gradle/
-build/
-!gradle/wrapper/gradle-wrapper.jar
-
-# Gradle cache and logs
-**/build/
-**/out/
-.gradle/
-!gradle/wrapper/gradle-wrapper.jar
-**/*.iml
-
-# === IntelliJ IDEA ===
-.idea/
+### IntelliJ IDEA ###
+.idea
 *.iws
 *.iml
 *.ipr
-out/
 
-# Sonarlint plugin
-.idea/sonarlint/
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# IntelliJ module/workspace files
-*.iml
-*.ipr
-*.iws
-
-# === OS files ===
-.DS_Store
-Thumbs.db
-
-# === Spring Boot ===
-# (Evita incluir arquivos sensíveis ou temporários)
-*.env
-*.properties.local
-*.yml.local
-
-# === Flyway (migrations temporárias, se tiver scripts auxiliares) ===
-*.sql~
-*.bak
-
-# === VS Code (se alguém usar) ===
+### VS Code ###
 .vscode/
 
-# === Logs e arquivos temporários ===
-*.log
-*.tmp
-*.swp
-*.swo
-*.swn
-
-# === Test coverage / reports ===
-coverage/
-*.exec
-jacoco.exec
-target/site/
-
-# === Database H2 / SQLite (se usado localmente) ===
-*.mv.db
-*.h2.db
-*.db
-
-# === Docker (se usar) ===
-**/.env
-**/docker-compose.override.yml
+### CONFIGURACOES LOCAIS ###
+.env
+.env.*
