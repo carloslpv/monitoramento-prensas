@@ -38,4 +38,19 @@ public class HistoricoManutencao {
     @ManyToOne
     @JoinColumn(name = "id_falha")
     private HistoricoFalhas historicoFalha;
+
+    public HistoricoManutencao(Maquina maquina,
+                               String tipoManutencao,
+                               String acaoRealizada,
+                               LocalDateTime dataHoraManutencao,
+                               Integer tempoManutencaoMin,
+                               HistoricoFalhas historicoFalha) {
+        this.maquina = maquina;
+        this.tipoManutencao = tipoManutencao;
+        this.acaoRealizada = acaoRealizada;
+        this.dataHoraManutencao = dataHoraManutencao;
+        this.tempoManutencaoMin = tempoManutencaoMin;
+        this.historicoFalha = historicoFalha;
+    }
+
 }
