@@ -2,7 +2,6 @@ package monitoramento_prensas.controllers;
 
 import monitoramento_prensas.exceptions.ObjetoNaoEncontradoException;
 import monitoramento_prensas.exceptions.PersistenceException;
-import monitoramento_prensas.models.dtos.MaquinaDTO;
 import monitoramento_prensas.models.dtos.TelemetriaDTO;
 import monitoramento_prensas.services.TelemetriaService;
 import org.springframework.http.HttpStatus;
