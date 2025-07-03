@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import monitoramento_prensas.models.dtos.MaquinaDTO;
 import monitoramento_prensas.models.dtos.TelemetriaDTO;
 
 import java.time.LocalDateTime;
@@ -59,5 +60,25 @@ public class Telemetria {
         this.nomeSensor = nomeSensor;
         this.maquinaLigada = maquinaLigada;
         this.maquina = maquina;
+    }
+
+    /**
+     * Retorna um objeto {@link TelemetriaDTO} a partir da telemetria
+     *
+     * @return
+     */
+    public TelemetriaDTO toDTO(){
+        return new TelemetriaDTO(
+                this.id,
+                this.sensorNivelBaixo,
+                this.pressaoHidraulica,
+                this.temperaturaOleo,
+                this.ciclosOperacao,
+                this.vibracao,
+                this.dataHoraColeta,
+                this.nomeSensor,
+                this.maquinaLigada,
+                this.maquina.getId()
+        );
     }
 }
