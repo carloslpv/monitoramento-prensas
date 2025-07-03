@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import monitoramento_prensas.models.dtos.TelemetriaDTO;
 
 import java.time.LocalDateTime;
 
@@ -19,8 +20,8 @@ public class Telemetria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "sensor_nivel")
-    private Boolean sensorNivel;
+    @Column(name = "sensor_nivel_baixo")
+    private Boolean sensorNivelBaixo;
 
     @Column(name = "pressao_hidraulica")
     private Float pressaoHidraulica;
@@ -46,4 +47,17 @@ public class Telemetria {
     @JoinColumn(name = "id_maquina")
     private Maquina maquina;
 
+    public Telemetria(Boolean sensorNivelBaixo, Float pressaoHidraulica, Float temperaturaOleo,
+                      Float ciclosOperacao, Float vibracao, LocalDateTime dataHoraColeta,
+                      String nomeSensor, Boolean maquinaLigada, Maquina maquina) {
+        this.sensorNivelBaixo = sensorNivelBaixo;
+        this.pressaoHidraulica = pressaoHidraulica;
+        this.temperaturaOleo = temperaturaOleo;
+        this.ciclosOperacao = ciclosOperacao;
+        this.vibracao = vibracao;
+        this.dataHoraColeta = dataHoraColeta;
+        this.nomeSensor = nomeSensor;
+        this.maquinaLigada = maquinaLigada;
+        this.maquina = maquina;
+    }
 }
