@@ -56,13 +56,13 @@ public class MaquinaController {
     public ResponseEntity<String> updateMaquina(@RequestBody MaquinaDTO dto){
         try {
             this.maquinaService.updateMaquina(dto);
-            return ResponseEntity.ok("Máquina atualizada com sucesso.");
+            return ResponseEntity.ok("Máquina removida com sucesso.");
         } catch (ObjetoNaoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Algo deu errado ao tentar atualizar o cadastro da máquina. Tente novamente");
+                    .body("Algo deu errado ao tentar remover o cadastro da máquina. Tente novamente");
         }
     }
 
