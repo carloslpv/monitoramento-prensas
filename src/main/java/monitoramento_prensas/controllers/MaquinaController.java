@@ -39,7 +39,7 @@ public class MaquinaController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> createMaquina(@RequestParam Integer idMaquina) {
+    public ResponseEntity<Object> getMaquina(@RequestParam Integer idMaquina) {
         try {
             final MaquinaDTO dto = this.maquinaService.getMaquinaDTO(idMaquina);
             return ResponseEntity.ok(dto);
