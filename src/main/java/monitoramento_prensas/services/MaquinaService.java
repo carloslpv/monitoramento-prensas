@@ -46,11 +46,26 @@ public class MaquinaService {
      * @return
      * @throws ObjetoNaoEncontradoException
      */
-    public MaquinaDTO getMaquina(final Integer idMaquina) throws ObjetoNaoEncontradoException {
+    public MaquinaDTO getMaquinaDTO(final Integer idMaquina) throws ObjetoNaoEncontradoException {
         final Optional<Maquina> optionalMaquina = this.maquinaRepository.findById(idMaquina);
         if (optionalMaquina.isEmpty()) {
             throw new ObjetoNaoEncontradoException("Não foi encontrada nenhuma máquina com este id");
         }
         return optionalMaquina.get().toDTO();
+    }
+
+    /**
+     * Retorna uma {@link Maquina} a partir do id de uma máquina.
+     *
+     * @param idMaquina
+     * @return
+     * @throws ObjetoNaoEncontradoException
+     */
+    public Maquina getMaquina(final Integer idMaquina) throws ObjetoNaoEncontradoException {
+        final Optional<Maquina> optionalMaquina = this.maquinaRepository.findById(idMaquina);
+        if (optionalMaquina.isEmpty()) {
+            throw new ObjetoNaoEncontradoException("Não foi encontrada nenhuma máquina com este id");
+        }
+        return optionalMaquina.get();
     }
 }

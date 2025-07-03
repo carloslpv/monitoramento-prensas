@@ -41,7 +41,7 @@ public class MaquinaController {
     @GetMapping
     public ResponseEntity<Object> createMaquina(@RequestParam Integer idMaquina) {
         try {
-            final MaquinaDTO dto = this.maquinaService.getMaquina(idMaquina);
+            final MaquinaDTO dto = this.maquinaService.getMaquinaDTO(idMaquina);
             return ResponseEntity.ok(dto);
         } catch (ObjetoNaoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -51,4 +51,5 @@ public class MaquinaController {
                     .body("Algo deu errado ao tentar criar o cadastro da máquina. Tente novamente");
         }
     }
+
 }
