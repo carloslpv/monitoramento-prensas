@@ -1,10 +1,13 @@
 package monitoramento_prensas.services;
 
+import monitoramento_prensas.exceptions.ObjetoNaoEncontradoException;
 import monitoramento_prensas.exceptions.PersistenceException;
 import monitoramento_prensas.models.Maquina;
 import monitoramento_prensas.models.dtos.MaquinaDTO;
 import monitoramento_prensas.repositories.MaquinaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * Service de {@link Maquina}.
@@ -34,5 +37,20 @@ public class MaquinaService {
         } catch (Exception e) {
             throw new PersistenceException("Não foi possível criar o cadastro da máquina. Verifique!");
         }
+    }
+
+    /**
+     * Retorna uma {@link MaquinaDTO} a partir do id de uma máquina.
+     *
+     * @param idMaquina
+     * @return
+     * @throws ObjetoNaoEncontradoException
+     */
+    public MaquinaDTO getMaquina(final Integer idMaquina) throws ObjetoNaoEncontradoException {
+        final Optional<Maquina> optionalMaquina = this.maquinaRepository.findById(idMaquina);
+        if (optionalMaquina.isEmpty()) {
+            throw new ObjetoNaoEncontradoException("Não foi encontrada nenhuma máquina com este id");
+        }
+        return optionalMaquina.get().toDTO();
     }
 }
