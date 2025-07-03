@@ -1,11 +1,14 @@
 package monitoramento_prensas.services;
 
+import monitoramento_prensas.exceptions.ObjetoNaoEncontradoException;
 import monitoramento_prensas.exceptions.PersistenceException;
 import monitoramento_prensas.models.Maquina;
 import monitoramento_prensas.models.Telemetria;
 import monitoramento_prensas.models.dtos.TelemetriaDTO;
 import monitoramento_prensas.repositories.TelemetriaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * Service de Telemetria.
@@ -47,5 +50,35 @@ public class TelemetriaService {
         } catch (Exception e) {
             throw new PersistenceException("Não foi possível criar o cadastro da telemetria. Verifique!");
         }
+    }
+
+    /**
+     * Retorna uma {@link TelemetriaDTO} a partir do id de uma telemetria.
+     *
+     * @param idTelemetria
+     * @return
+     * @throws ObjetoNaoEncontradoException
+     */
+    public TelemetriaDTO getTelemetriaDTO(final Integer idTelemetria) throws ObjetoNaoEncontradoException {
+        final Optional<Telemetria> optionalTelemetria = this.telemetriaRepository.findById(idTelemetria);
+        if (optionalTelemetria.isEmpty()) {
+            throw new ObjetoNaoEncontradoException("Não foi encontrada nenhuma telemetria com este id");
+        }
+        return optionalTelemetria.get().toDTO();
+    }
+
+    /**
+     * Retorna uma {@link Telemetria} a partir do id de uma telemetria.
+     *
+     * @param idTelemetria
+     * @return
+     * @throws ObjetoNaoEncontradoException
+     */
+    public Telemetria getTelemetria(final Integer idTelemetria) throws ObjetoNaoEncontradoException {
+        final Optional<Telemetria> optionalTelemetria = this.telemetriaRepository.findById(idTelemetria);
+        if (optionalTelemetria.isEmpty()) {
+            throw new ObjetoNaoEncontradoException("Não foi encontrada nenhuma telemetria com este id");
+        }
+        return optionalTelemetria.get();
     }
 }
