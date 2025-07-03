@@ -88,4 +88,18 @@ public class MaquinaService {
             throw new PersistenceException("Não foi possível atualizar o cadastro da máquina. Verifique!");
         }
     }
+
+    /**
+     * Remove o cadastro de uma {@link Maquina}.
+     *
+     * @param id
+     * @throws PersistenceException
+     */
+    public void deleteMaquina(final Integer id) throws PersistenceException {
+        try {
+            this.maquinaRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new PersistenceException("Não foi possível remover o cadastro da máquina. Verifique!");
+        }
+    }
 }
