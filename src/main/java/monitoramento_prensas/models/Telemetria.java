@@ -19,8 +19,8 @@ public class Telemetria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "sensor_nivel")
-    private Boolean sensorNivel;
+    @Column(name = "sensor_nivel_baixo")
+    private Boolean sensorNivelBaixo;
 
     @Column(name = "pressao_hidraulica")
     private Float pressaoHidraulica;
