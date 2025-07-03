@@ -1,0 +1,1 @@
+ALTER TABLE telemetria RENAME COLUMN sensor_nivel TO sensor_nivel_baixo;
