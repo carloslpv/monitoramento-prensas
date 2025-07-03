@@ -57,13 +57,27 @@ public class TelemetriaController {
     public ResponseEntity<String> updateTelemetria(@RequestBody TelemetriaDTO dto){
         try {
             this.telemetriaService.updateTelemetria(dto);
-            return ResponseEntity.ok("Telemetria atualizada com sucesso.");
+            return ResponseEntity.ok("Telemetria removida com sucesso.");
         } catch (ObjetoNaoEncontradoException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Algo deu errado ao tentar atualizar o cadastro da telemetria. Tente novamente");
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteTelemetria(@RequestBody Integer id){
+        try {
+            this.telemetriaService.deleteTelemetria(id);
+            return ResponseEntity.ok("Máquina atualizada com sucesso.");
+        } catch (PersistenceException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Algo deu errado ao tentar remover o cadastro da telemetria. Tente novamente");
         }
     }
 }
