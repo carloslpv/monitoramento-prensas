@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import monitoramento_prensas.models.dtos.HistoricoManutencaoDTO;
+import monitoramento_prensas.models.dtos.MaquinaDTO;
 
 import java.time.LocalDateTime;
 
@@ -53,4 +55,20 @@ public class HistoricoManutencao {
         this.historicoFalha = historicoFalha;
     }
 
+    /**
+     * Retorna um objeto {@link HistoricoManutencaoDTO} a partir do historico de manutencao
+     *
+     * @return
+     */
+    public HistoricoManutencaoDTO toDTO(){
+        return new HistoricoManutencaoDTO(
+                this.id,
+                this.maquina.getId(),
+                this.tipoManutencao,
+                this.acaoRealizada,
+                this.dataHoraManutencao,
+                this.tempoManutencaoMin,
+                this.historicoFalha.getId()
+        );
+    }
 }
