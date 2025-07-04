@@ -3,6 +3,7 @@ package monitoramento_prensas.controllers;
 import monitoramento_prensas.exceptions.ObjetoNaoEncontradoException;
 import monitoramento_prensas.exceptions.PersistenceException;
 import monitoramento_prensas.models.dtos.HistoricoManutencaoDTO;
+import monitoramento_prensas.models.dtos.MaquinaDTO;
 import monitoramento_prensas.services.HistoricoManutencaoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,20 @@ public class HistoricoManutencaoController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Algo deu errado ao tentar buscar o cadastro do histórico de manutenção. Tente novamente");
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<String> updateHistoricoManutencao(@RequestBody HistoricoManutencaoDTO dto){
+        try {
+            this.historicoManutencaoService.updateHistoricoManutencao(dto);
+            return ResponseEntity.ok("Histórico de manutencao atualizada com sucesso.");
+        } catch (ObjetoNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Algo deu errado ao tentar atualizar o histórico de manutencao. Tente novamente");
         }
     }
 

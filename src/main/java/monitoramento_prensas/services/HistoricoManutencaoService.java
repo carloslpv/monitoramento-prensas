@@ -85,4 +85,35 @@ public class HistoricoManutencaoService {
         }
         return optionalHistoricoManutencao.get();
     }
+
+    /**
+     * Atualiza o cadastro de um {@link HistoricoManutencao}.
+     *
+     * @param dto
+     * @throws ObjetoNaoEncontradoException
+     * @throws PersistenceException
+     */
+    public void updateHistoricoManutencao(final HistoricoManutencaoDTO dto) throws ObjetoNaoEncontradoException, PersistenceException {
+        try {
+            final HistoricoManutencao historicoManutencao = this.getHistoricoManutencao(dto.id());
+            Maquina maquina;
+            if(historicoManutencao.getMaquina().getId() != dto.idMaquina()){
+                maquina = this.maquinaService.getMaquina(dto.idMaquina());
+                historicoManutencao.setMaquina(maquina);
+            }
+            HistoricoFalhas historicoFalhas;
+            if(historicoManutencao.getHistoricoFalha() != null && historicoManutencao.getHistoricoFalha().getId() !=
+                    dto.idHistoricoFalha()) {
+                historicoFalhas = this.historicoFalhasService.getFalha(dto.idHistoricoFalha());
+                historicoManutencao.setHistoricoFalha(historicoFalhas);
+            }
+            historicoManutencao.setTipoManutencao(dto.tipoManutencao());
+            historicoManutencao.setAcaoRealizada(dto.acaoRealizada());
+            historicoManutencao.setDataHoraManutencao(dto.dataHoraManutencao());
+            historicoManutencao.setTempoManutencaoMin(dto.tempoManutencaoMin());
+            this.historicoManutencaoRepository.save(historicoManutencao);
+        } catch (Exception e) {
+            throw new PersistenceException("Não foi possível atualizar o cadastro do histórico de manutenção. Verifique!");
+        }
+    }
 }

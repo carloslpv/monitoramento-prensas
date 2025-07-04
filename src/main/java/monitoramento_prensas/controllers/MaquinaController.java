@@ -62,7 +62,7 @@ public class MaquinaController {
                     .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Algo deu errado ao tentar remover o cadastro da máquina. Tente novamente");
+                    .body("Algo deu errado ao tentar atualizar o cadastro da máquina. Tente novamente");
         }
     }
 
