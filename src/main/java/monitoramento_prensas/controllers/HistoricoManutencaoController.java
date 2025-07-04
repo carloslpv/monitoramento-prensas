@@ -27,7 +27,7 @@ public class HistoricoManutencaoController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createMaquina(@RequestBody HistoricoManutencaoDTO dto) {
+    public ResponseEntity<String> createHistoricoManutencao(@RequestBody HistoricoManutencaoDTO dto) {
         try {
             this.historicoManutencaoService.createHistoricoManutencao(dto);
             return ResponseEntity.ok("Máquina cadastrada com sucesso.");
@@ -39,4 +39,5 @@ public class HistoricoManutencaoController {
                     .body("Algo deu errado ao tentar criar o cadastro da máquina. Tente novamente");
         }
     }
+
 }
