@@ -67,4 +67,17 @@ public class HistoricoManutencaoController {
         }
     }
 
+    @DeleteMapping
+    public ResponseEntity<String> deleteHistoricoManutencao(@RequestBody Integer id){
+        try {
+            this.historicoManutencaoService.deleteHistoricoManutencao(id);
+            return ResponseEntity.ok("Máquina atualizada com sucesso.");
+        } catch (PersistenceException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Algo deu errado ao tentar remover o histórico de manutenção. Tente novamente");
+        }
+    }
 }

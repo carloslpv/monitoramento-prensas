@@ -116,4 +116,18 @@ public class HistoricoManutencaoService {
             throw new PersistenceException("Não foi possível atualizar o cadastro do histórico de manutenção. Verifique!");
         }
     }
+
+    /**
+     * Remove o cadastro de um {@link HistoricoManutencao}.
+     *
+     * @param id
+     * @throws PersistenceException
+     */
+    public void deleteHistoricoManutencao(final Integer id) throws PersistenceException {
+        try {
+            this.historicoManutencaoRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new PersistenceException("Não foi possível remover o histórico de manutenção. Verifique!");
+        }
+    }
 }
