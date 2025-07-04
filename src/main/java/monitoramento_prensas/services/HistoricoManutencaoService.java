@@ -1,14 +1,15 @@
 package monitoramento_prensas.services;
 
+import monitoramento_prensas.exceptions.ObjetoNaoEncontradoException;
 import monitoramento_prensas.exceptions.PersistenceException;
 import monitoramento_prensas.models.HistoricoFalhas;
 import monitoramento_prensas.models.HistoricoManutencao;
 import monitoramento_prensas.models.Maquina;
-import monitoramento_prensas.models.Telemetria;
 import monitoramento_prensas.models.dtos.HistoricoManutencaoDTO;
-import monitoramento_prensas.models.dtos.TelemetriaDTO;
 import monitoramento_prensas.repositories.HistoricoManutencaoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * Service de {@link HistoricoManutencao}.
@@ -23,7 +24,7 @@ public class HistoricoManutencaoService {
     private MaquinaService maquinaService;
     private HistoricoFalhasService historicoFalhasService;
 
-    public HistoricoManutencaoService(){
+    public HistoricoManutencaoService() {
         this.historicoManutencaoRepository = historicoManutencaoRepository;
         this.maquinaService = maquinaService;
         this.historicoFalhasService = historicoFalhasService;
@@ -39,7 +40,7 @@ public class HistoricoManutencaoService {
         try {
             final Maquina maquina = this.maquinaService.getMaquina(dto.idMaquina());
             HistoricoFalhas historicoFalha = new HistoricoFalhas();
-            if(dto.idHistoricoFalha() != null){
+            if (dto.idHistoricoFalha() != null) {
                 historicoFalha = this.historicoFalhasService.getFalha(dto.idHistoricoFalha());
             }
             final HistoricoManutencao historicoManutencao = new HistoricoManutencao(
@@ -53,5 +54,35 @@ public class HistoricoManutencaoService {
         } catch (Exception e) {
             throw new PersistenceException("Não foi possível criar o cadastro do histórico de manutenção. Verifique!");
         }
+    }
+
+    /**
+     * Retorna uma {@link HistoricoManutencaoDTO} a partir do id de uma de um historico de manutencao.
+     *
+     * @param idHistoricoManutencao
+     * @return
+     * @throws ObjetoNaoEncontradoException
+     */
+    public HistoricoManutencaoDTO getHistoricoManutencaoDTO(final Integer idHistoricoManutencao) throws ObjetoNaoEncontradoException {
+        final Optional<HistoricoManutencao> optionalHistoricoManutencao = this.historicoManutencaoRepository.findById(idHistoricoManutencao);
+        if (optionalHistoricoManutencao.isEmpty()) {
+            throw new ObjetoNaoEncontradoException("Não foi encontrada nenhum histórico de manutenção com este id");
+        }
+        return optionalHistoricoManutencao.get().toDTO();
+    }
+
+    /**
+     * Retorna uma {@link HistoricoManutencao} a partir do id de um historico de manutencao.
+     *
+     * @param idHistoricoManutencao
+     * @return
+     * @throws ObjetoNaoEncontradoException
+     */
+    public HistoricoManutencao getHistoricoManutencao(final Integer idHistoricoManutencao) throws ObjetoNaoEncontradoException {
+        final Optional<HistoricoManutencao> optionalHistoricoManutencao = this.historicoManutencaoRepository.findById(idHistoricoManutencao);
+        if (optionalHistoricoManutencao.isEmpty()) {
+            throw new ObjetoNaoEncontradoException("Não foi encontrada nenhum histórico de manutenção com este id");
+        }
+        return optionalHistoricoManutencao.get();
     }
 }
