@@ -8,7 +8,9 @@ import monitoramento_prensas.models.dtos.TelemetriaDTO;
 import monitoramento_prensas.repositories.TelemetriaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service de Telemetria.
@@ -22,7 +24,7 @@ public class TelemetriaService {
     private TelemetriaRepository telemetriaRepository;
     private MaquinaService maquinaService;
 
-    public TelemetriaService(TelemetriaRepository telemetriaRepository, MaquinaService maquinaService){
+    public TelemetriaService(TelemetriaRepository telemetriaRepository, MaquinaService maquinaService) {
         this.telemetriaRepository = telemetriaRepository;
         this.maquinaService = maquinaService;
     }
@@ -93,7 +95,7 @@ public class TelemetriaService {
         try {
             final Telemetria telemetria = this.getTelemetria(dto.id());
             Maquina maquina = new Maquina();
-            if(telemetria.getMaquina().getId() != dto.idMaquina()){
+            if (telemetria.getMaquina().getId() != dto.idMaquina()) {
                 maquina = this.maquinaService.getMaquina(dto.idMaquina());
             }
             telemetria.setSensorNivelBaixo(dto.sensorNivelBaixo());
@@ -123,5 +125,14 @@ public class TelemetriaService {
         } catch (Exception e) {
             throw new PersistenceException("Não foi possível remover o cadastro da Telemetria. Verifique!");
         }
+    }
+
+    /**
+     * Retorna uma lista de {@link TelemetriaDTO}
+     *
+     * @return
+     */
+    public List<TelemetriaDTO> getAllTelemetriaDTO() {
+        return this.telemetriaRepository.findAll().stream().map(Telemetria::toDTO).collect(Collectors.toList());
     }
 }
