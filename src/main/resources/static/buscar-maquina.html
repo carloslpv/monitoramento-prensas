@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Máquina</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+
+        input, button {
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        #resultado {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            background-color: #f3f3f3;
+        }
+    </style>
+</head>
+<body>
+<h1>Buscar Máquina por ID</h1>
+
+<label for="idMaquina">ID da Máquina:</label>
+<input type="number" id="idMaquina" min="1" required />
+<button onclick="buscarMaquina()">Buscar</button>
+
+<div id="resultado" style="display: none;"></div>
+
+<script>
+    async function buscarMaquina() {
+        const id = document.getElementById('idMaquina').value;
+        const resultado = document.getElementById('resultado');
+
+        if (!id) {
+            alert('Informe o ID da máquina.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/maquina?idMaquina=${id}`);
+
+            if (!response.ok) {
+                const erro = await response.text();
+                resultado.style.display = 'block';
+                resultado.innerHTML = `<strong>Erro:</strong> ${erro}`;
+                return;
+            }
+
+            const data = await response.json();
+
+            resultado.style.display = 'block';
+            resultado.innerHTML = `
+                    <h3>Máquina Encontrada:</h3>
+                    <p><strong>ID:</strong> ${data.id}</p>
+                    <p><strong>Nome:</strong> ${data.nome}</p>
+                    <p><strong>Fabricante:</strong> ${data.fabricante}</p>
+                    <p><strong>Modelo:</strong> ${data.modelo}</p>
+                    <p><strong>Data de Compra:</strong> ${data.dataCompra}</p>
+                `;
+        } catch (err) {
+            resultado.style.display = 'block';
+            resultado.innerHTML = `<strong>Erro ao se comunicar com o servidor:</strong> ${err}`;
+        }
+    }
+</script>
+</body>
+</html>
