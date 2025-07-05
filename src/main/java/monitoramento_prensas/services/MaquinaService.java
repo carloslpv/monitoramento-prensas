@@ -3,11 +3,15 @@ package monitoramento_prensas.services;
 import monitoramento_prensas.exceptions.ObjetoNaoEncontradoException;
 import monitoramento_prensas.exceptions.PersistenceException;
 import monitoramento_prensas.models.Maquina;
+import monitoramento_prensas.models.Telemetria;
 import monitoramento_prensas.models.dtos.MaquinaDTO;
+import monitoramento_prensas.models.dtos.TelemetriaDTO;
 import monitoramento_prensas.repositories.MaquinaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service de {@link Maquina}.
@@ -101,5 +105,14 @@ public class MaquinaService {
         } catch (Exception e) {
             throw new PersistenceException("Não foi possível remover o cadastro da máquina. Verifique!");
         }
+    }
+
+    /**
+     * Retorna uma lista de {@link MaquinaDTO}
+     *
+     * @return
+     */
+    public List<MaquinaDTO> getAllMaquinaDTO() {
+        return this.maquinaRepository.findAll().stream().map(Maquina::toDTO).collect(Collectors.toList());
     }
 }
