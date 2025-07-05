@@ -8,7 +8,9 @@ import monitoramento_prensas.models.dtos.HistoricoFalhasDTO;
 import monitoramento_prensas.repositories.HistoricoFalhasRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service de {@link HistoricoFalhas}.
@@ -109,6 +111,15 @@ public class HistoricoFalhasService {
         } catch (Exception e) {
             throw new PersistenceException("Não foi possível remover o registro da falha. Verifique!");
         }
+    }
+
+    /**
+     * Retorna uma lista de {@link HistoricoFalhasDTO}
+     *
+     * @return
+     */
+    public List<HistoricoFalhasDTO> getAllTelemetriaDTO() {
+        return this.historicoFalhasRepository.findAll().stream().map(HistoricoFalhas::toDTO).collect(Collectors.toList());
     }
 }
 
