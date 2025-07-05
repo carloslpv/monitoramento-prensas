@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquinas</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Máquinas Cadastradas</h1>
+        <div id="message-container"></div>
+        <div class="form-actions" style="justify-content: flex-start; margin-bottom: 20px;">
+            <a href="create.html" class="button button-success">Cadastrar Nova Máquina</a>
+            <a href="../dashboard.html" class="button button-secondary">Voltar ao Dashboard</a>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Modelo</th>
+                    <th>Fabricante</th>
+                    <th>Data Compra</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="maquinas-table-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadMaquinas();
+        });
+
+        async function loadMaquinas() {
+            const tableBody = document.getElementById('maquinas-table-body');
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Carregando...</td></tr>';
+            try {
+                // Assumindo um endpoint /maquina/all para listar tudo
+                const maquinas = await fetchData('/maquina/all');
+                tableBody.innerHTML = '';
+
+                if (maquinas && maquinas.length > 0) {
+                    maquinas.forEach(maquina => {
+                        const row = tableBody.insertRow();
+                        row.insertCell().textContent = maquina.id;
+                        row.insertCell().textContent = maquina.nome;
+                        row.insertCell().textContent = maquina.modelo;
+                        row.insertCell().textContent = maquina.fabricante;
+                        row.insertCell().textContent = maquina.dataCompra ? new Date(maquina.dataCompra).toLocaleDateString() : 'N/A';
+
+                        const actionsCell = row.insertCell();
+                        actionsCell.className = 'table-actions';
+
+                        const viewButton = document.createElement('a');
+                        viewButton.href = `details.html?idMaquina=${maquina.id}`;
+                        viewButton.className = 'button button-info';
+                        viewButton.textContent = 'Ver';
+                        actionsCell.appendChild(viewButton);
+
+                        const editButton = document.createElement('a');
+                        editButton.href = `edit.html?idMaquina=${maquina.id}`;
+                        editButton.className = 'button button-primary';
+                        editButton.textContent = 'Editar';
+                        actionsCell.appendChild(editButton);
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'button button-danger';
+                        deleteButton.textContent = 'Excluir';
+                        deleteButton.onclick = () => deleteMaquina(maquina.id);
+                        actionsCell.appendChild(deleteButton);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhuma máquina cadastrada.</td></tr>';
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar máquinas:', error);
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger-color);">Erro ao carregar dados.</td></tr>';
+                displayMessage(`Erro ao carregar máquinas: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteMaquina(id) {
+            if (confirm(`Tem certeza que deseja excluir a máquina com ID ${id}?`)) {
+                try {
+                    const message = await deleteData('/maquina', id);
+                    displayMessage(message, 'success');
+                    await loadMaquinas();
+                } catch (error) {
+                    displayMessage(`Erro ao excluir máquina: ${error.message}`, 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

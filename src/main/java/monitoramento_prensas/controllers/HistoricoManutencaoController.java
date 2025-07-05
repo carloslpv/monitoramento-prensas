@@ -2,12 +2,15 @@ package monitoramento_prensas.controllers;
 
 import monitoramento_prensas.exceptions.ObjetoNaoEncontradoException;
 import monitoramento_prensas.exceptions.PersistenceException;
+import monitoramento_prensas.models.dtos.HistoricoFalhasDTO;
 import monitoramento_prensas.models.dtos.HistoricoManutencaoDTO;
 import monitoramento_prensas.models.dtos.MaquinaDTO;
 import monitoramento_prensas.services.HistoricoManutencaoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Controller de HistoricoManutencao
@@ -79,5 +82,11 @@ public class HistoricoManutencaoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Algo deu errado ao tentar remover o histórico de manutenção. Tente novamente");
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<HistoricoManutencaoDTO>> getAllManutencao() {
+        List<HistoricoManutencaoDTO> manutencao = this.historicoManutencaoService.getAllHistoricoManutencaoDTO();
+        return ResponseEntity.ok(manutencao);
     }
 }

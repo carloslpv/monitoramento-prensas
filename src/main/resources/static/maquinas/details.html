@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Máquina</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes da Máquina</h1>
+        <div id="message-container"></div>
+
+        <div class="card" id="maquina-details-card">
+            </div>
+
+        <div class="form-actions">
+            <a href="list.html" class="button button-secondary">Voltar para a Lista</a>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const maquinaId = urlParams.get('idMaquina');
+            const detailsCard = document.getElementById('maquina-details-card');
+
+            if (maquinaId) {
+                try {
+                    const maquina = await fetchData(`/maquina?idMaquina=${maquinaId}`);
+                    detailsCard.innerHTML = `
+                        <div class="card-header">Máquina ID: ${maquina.id}</div>
+                        <div class="card-body">
+                            <p><strong>Nome:</strong> ${maquina.nome}</p>
+                            <p><strong>Modelo:</strong> ${maquina.modelo}</p>
+                            <p><strong>Fabricante:</strong> ${maquina.fabricante}</p>
+                            <p><strong>Data da Compra:</strong> ${maquina.dataCompra ? new Date(maquina.dataCompra).toLocaleDateString() : 'N/A'}</p>
+                        </div>
+                    `;
+                } catch (error) {
+                    detailsCard.innerHTML = `<p class="message error">Erro ao carregar detalhes da máquina: ${error.message}</p>`;
+                    displayMessage(`Erro ao carregar detalhes da máquina: ${error.message}`, 'error');
+                }
+            } else {
+                detailsCard.innerHTML = `<p class="message error">ID da máquina não fornecido.</p>`;
+                displayMessage('ID da máquina não fornecido.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

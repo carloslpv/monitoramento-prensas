@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Falhas</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Histórico de Falhas de Máquinas</h1>
+        <div id="message-container"></div>
+        <div class="form-actions" style="justify-content: flex-start; margin-bottom: 20px;">
+            <a href="create.html" class="button button-success">Registrar Nova Falha</a>
+            <a href="../dashboard.html" class="button button-secondary">Voltar ao Dashboard</a>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID Máquina</th>
+                    <th>Tipo de Falha</th>
+                    <th>Data da Falha</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="falhas-table-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadHistoricoFalhas();
+        });
+
+        async function loadHistoricoFalhas() {
+            const tableBody = document.getElementById('falhas-table-body');
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Carregando...</td></tr>';
+            try {
+                // Seu endpoint GET /historicoFalhas aceita @RequestParam Integer id
+                // Para listar todos, precisaríamos de um endpoint que retorne uma lista.
+                // Vou simular um array vazio por enquanto, ou você precisaria adicionar
+                // um @GetMapping que retorna List<HistoricoFalhasDTO> para listar tudo.
+                // Exemplo: /historicoFalhas/all
+                const falhas = await fetchData('/historicoFalhas/all'); // Supondo que você crie este endpoint
+                tableBody.innerHTML = ''; // Limpa a mensagem de carregamento
+
+                if (falhas && falhas.length > 0) {
+                    falhas.forEach(falha => {
+                        const row = tableBody.insertRow();
+                        row.insertCell().textContent = falha.id;
+                        row.insertCell().textContent = falha.idMaquina;
+                        row.insertCell().textContent = falha.tipoFalha;
+                        row.insertCell().textContent = falha.dataFalha ? new Date(falha.dataFalha).toLocaleString() : 'N/A';
+
+                        const actionsCell = row.insertCell();
+                        actionsCell.className = 'table-actions';
+
+                        const viewButton = document.createElement('a');
+                        viewButton.href = `details.html?id=${falha.id}`;
+                        viewButton.className = 'button button-info';
+                        viewButton.textContent = 'Ver';
+                        actionsCell.appendChild(viewButton);
+
+                        const editButton = document.createElement('a');
+                        editButton.href = `edit.html?id=${falha.id}`;
+                        editButton.className = 'button button-primary';
+                        editButton.textContent = 'Editar';
+                        actionsCell.appendChild(editButton);
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'button button-danger';
+                        deleteButton.textContent = 'Excluir';
+                        deleteButton.onclick = () => deleteHistoricoFalha(falha.id);
+                        actionsCell.appendChild(deleteButton);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhuma falha registrada.</td></tr>';
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar histórico de falhas:', error);
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--danger-color);">Erro ao carregar dados.</td></tr>';
+                displayMessage(`Erro ao carregar histórico de falhas: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteHistoricoFalha(id) {
+            if (confirm(`Tem certeza que deseja excluir a falha com ID ${id}?`)) {
+                try {
+                    const message = await deleteData('/historicoFalhas', id);
+                    displayMessage(message, 'success');
+                    await loadHistoricoFalhas(); // Recarrega a lista
+                } catch (error) {
+                    displayMessage(`Erro ao excluir falha: ${error.message}`, 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

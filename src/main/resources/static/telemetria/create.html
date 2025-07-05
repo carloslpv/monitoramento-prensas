@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Nova Telemetria</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Registrar Nova Telemetria</h1>
+        <div id="message-container"></div>
+
+        <form id="create-telemetria-form">
+            <div class="form-group">
+                <label for="idMaquina">ID da Máquina:</label>
+                <input type="number" id="idMaquina" name="idMaquina" required>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="sensorNivelBaixo" name="sensorNivelBaixo">
+                <label for="sensorNivelBaixo">Sensor Nível Baixo?</label>
+            </div>
+            <div class="form-group">
+                <label for="pressaoHidraulica">Pressão Hidráulica:</label>
+                <input type="number" step="0.01" id="pressaoHidraulica" name="pressaoHidraulica" required>
+            </div>
+            <div class="form-group">
+                <label for="temperaturaOleo">Temperatura Óleo:</label>
+                <input type="number" step="0.01" id="temperaturaOleo" name="temperaturaOleo" required>
+            </div>
+            <div class="form-group">
+                <label for="ciclosOperacao">Ciclos de Operação:</label>
+                <input type="number" step="0.01" id="ciclosOperacao" name="ciclosOperacao" required>
+            </div>
+            <div class="form-group">
+                <label for="vibracao">Vibração:</label>
+                <input type="number" step="0.01" id="vibracao" name="vibracao" required>
+            </div>
+            <div class="form-group">
+                <label for="dataHoraColeta">Data/Hora da Coleta:</label>
+                <input type="datetime-local" id="dataHoraColeta" name="dataHoraColeta" required>
+            </div>
+            <div class="form-group">
+                <label for="nomeSensor">Nome do Sensor:</label>
+                <input type="text" id="nomeSensor" name="nomeSensor" required>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="maquinaLigada" name="maquinaLigada">
+                <label for="maquinaLigada">Máquina Ligada?</label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="button button-success">Registrar Telemetria</button>
+                <a href="list.html" class="button button-secondary">Voltar para a Lista</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.getElementById('create-telemetria-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const telemetriaData = {
+                idMaquina: parseInt(document.getElementById('idMaquina').value),
+                sensorNivelBaixo: document.getElementById('sensorNivelBaixo').checked,
+                pressaoHidraulica: parseFloat(document.getElementById('pressaoHidraulica').value),
+                temperaturaOleo: parseFloat(document.getElementById('temperaturaOleo').value),
+                ciclosOperacao: parseFloat(document.getElementById('ciclosOperacao').value),
+                vibracao: parseFloat(document.getElementById('vibracao').value),
+                dataHoraColeta: parseDateTimeFromInput(document.getElementById('dataHoraColeta').value),
+                nomeSensor: document.getElementById('nomeSensor').value,
+                maquinaLigada: document.getElementById('maquinaLigada').checked
+            };
+
+            try {
+                const message = await postData('/telemetria', telemetriaData);
+                displayMessage(message, 'success');
+                document.getElementById('create-telemetria-form').reset();
+            } catch (error) {
+                displayMessage(`Erro ao registrar telemetria: ${error.message}`, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

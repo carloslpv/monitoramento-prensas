@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Telemetria</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Telemetria</h1>
+        <div id="message-container"></div>
+
+        <form id="edit-telemetria-form">
+            <div class="form-group" style="display: none;">
+                <label for="id">ID da Telemetria:</label>
+                <input type="number" id="id" name="id" readonly>
+            </div>
+            <div class="form-group">
+                <label for="idMaquina">ID da Máquina:</label>
+                <input type="number" id="idMaquina" name="idMaquina" required>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="sensorNivelBaixo" name="sensorNivelBaixo">
+                <label for="sensorNivelBaixo">Sensor Nível Baixo?</label>
+            </div>
+            <div class="form-group">
+                <label for="pressaoHidraulica">Pressão Hidráulica:</label>
+                <input type="number" step="0.01" id="pressaoHidraulica" name="pressaoHidraulica" required>
+            </div>
+            <div class="form-group">
+                <label for="temperaturaOleo">Temperatura Óleo:</label>
+                <input type="number" step="0.01" id="temperaturaOleo" name="temperaturaOleo" required>
+            </div>
+            <div class="form-group">
+                <label for="ciclosOperacao">Ciclos de Operação:</label>
+                <input type="number" step="0.01" id="ciclosOperacao" name="ciclosOperacao" required>
+            </div>
+            <div class="form-group">
+                <label for="vibracao">Vibração:</label>
+                <input type="number" step="0.01" id="vibracao" name="vibracao" required>
+            </div>
+            <div class="form-group">
+                <label for="dataHoraColeta">Data/Hora da Coleta:</label>
+                <input type="datetime-local" id="dataHoraColeta" name="dataHoraColeta" required>
+            </div>
+            <div class="form-group">
+                <label for="nomeSensor">Nome do Sensor:</label>
+                <input type="text" id="nomeSensor" name="nomeSensor" required>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="maquinaLigada" name="maquinaLigada">
+                <label for="maquinaLigada">Máquina Ligada?</label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="button button-primary">Salvar Alterações</button>
+                <a href="list.html" class="button button-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const telemetriaId = urlParams.get('idTelemetria');
+
+            if (telemetriaId) {
+                try {
+                    const telemetria = await fetchData(`/telemetria?idTelemetria=${telemetriaId}`);
+                    document.getElementById('id').value = telemetria.id;
+                    document.getElementById('idMaquina').value = telemetria.idMaquina;
+                    document.getElementById('sensorNivelBaixo').checked = telemetria.sensorNivelBaixo;
+                    document.getElementById('pressaoHidraulica').value = telemetria.pressaoHidraulica;
+                    document.getElementById('temperaturaOleo').value = telemetria.temperaturaOleo;
+                    document.getElementById('ciclosOperacao').value = telemetria.ciclosOperacao;
+                    document.getElementById('vibracao').value = telemetria.vibracao;
+                    document.getElementById('dataHoraColeta').value = formatDateTimeForInput(telemetria.dataHoraColeta);
+                    document.getElementById('nomeSensor').value = telemetria.nomeSensor;
+                    document.getElementById('maquinaLigada').checked = telemetria.maquinaLigada;
+                } catch (error) {
+                    displayMessage(`Erro ao carregar dados da telemetria: ${error.message}`, 'error');
+                }
+            } else {
+                displayMessage('ID da telemetria não fornecido.', 'error');
+            }
+        });
+
+        document.getElementById('edit-telemetria-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const telemetriaData = {
+                id: parseInt(document.getElementById('id').value),
+                idMaquina: parseInt(document.getElementById('idMaquina').value),
+                sensorNivelBaixo: document.getElementById('sensorNivelBaixo').checked,
+                pressaoHidraulica: parseFloat(document.getElementById('pressaoHidraulica').value),
+                temperaturaOleo: parseFloat(document.getElementById('temperaturaOleo').value),
+                ciclosOperacao: parseFloat(document.getElementById('ciclosOperacao').value),
+                vibracao: parseFloat(document.getElementById('vibracao').value),
+                dataHoraColeta: parseDateTimeFromInput(document.getElementById('dataHoraColeta').value),
+                nomeSensor: document.getElementById('nomeSensor').value,
+                maquinaLigada: document.getElementById('maquinaLigada').checked
+            };
+
+            try {
+                const message = await putData('/telemetria', telemetriaData);
+                displayMessage(message, 'success');
+            } catch (error) {
+                displayMessage(`Erro ao atualizar telemetria: ${error.message}`, 'error');
+            }
+        });
+    </script>
+</body>
+</html>
