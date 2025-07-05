@@ -26,7 +26,9 @@ public class HistoricoManutencaoService {
     private MaquinaService maquinaService;
     private HistoricoFalhasService historicoFalhasService;
 
-    public HistoricoManutencaoService() {
+    public HistoricoManutencaoService(HistoricoManutencaoRepository historicoManutencaoRepository,
+                                      MaquinaService maquinaService,
+                                      HistoricoFalhasService historicoFalhasService) {
         this.historicoManutencaoRepository = historicoManutencaoRepository;
         this.maquinaService = maquinaService;
         this.historicoFalhasService = historicoFalhasService;
