@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Nova Falha</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Registrar Nova Falha</h1>
+        <div id="message-container"></div>
+
+        <form id="create-falha-form">
+            <div class="form-group">
+                <label for="idMaquina">ID da Máquina:</label>
+                <input type="number" id="idMaquina" name="idMaquina" required>
+            </div>
+            <div class="form-group">
+                <label for="tipoFalha">Tipo de Falha:</label>
+                <input type="text" id="tipoFalha" name="tipoFalha" required>
+            </div>
+            <div class="form-group">
+                <label for="dataFalha">Data da Falha:</label>
+                <input type="datetime-local" id="dataFalha" name="dataFalha" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="button button-success">Registrar Falha</button>
+                <a href="list.html" class="button button-secondary">Voltar para a Lista</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.getElementById('create-falha-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const falhaData = {
+                idMaquina: parseInt(document.getElementById('idMaquina').value),
+                tipoFalha: document.getElementById('tipoFalha').value,
+                dataFalha: parseDateTimeFromInput(document.getElementById('dataFalha').value)
+            };
+
+            try {
+                const message = await postData('/historicoFalhas', falhaData);
+                displayMessage(message, 'success');
+                document.getElementById('create-falha-form').reset(); // Limpa o formulário
+            } catch (error) {
+                displayMessage(`Erro ao registrar falha: ${error.message}`, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

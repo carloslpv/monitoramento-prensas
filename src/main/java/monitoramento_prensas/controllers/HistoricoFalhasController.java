@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Controller de HistoricoFalhas
  *
@@ -78,5 +80,11 @@ public class HistoricoFalhasController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Algo deu errado ao tentar remover o registro da falha. Tente novamente");
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<HistoricoFalhasDTO>> getAllFalhas() {
+        List<HistoricoFalhasDTO> falhas = this.falhaService.getAllHistoricoFalhasDTO();
+        return ResponseEntity.ok(falhas);
     }
 }

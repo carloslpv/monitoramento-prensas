@@ -2,11 +2,14 @@ package monitoramento_prensas.controllers;
 
 import monitoramento_prensas.exceptions.ObjetoNaoEncontradoException;
 import monitoramento_prensas.exceptions.PersistenceException;
+import monitoramento_prensas.models.dtos.MaquinaDTO;
 import monitoramento_prensas.models.dtos.TelemetriaDTO;
 import monitoramento_prensas.services.TelemetriaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Controller de Telemetria
@@ -78,5 +81,11 @@ public class TelemetriaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Algo deu errado ao tentar remover o cadastro da telemetria. Tente novamente");
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<TelemetriaDTO>> getAllTelemetria() {
+        List<TelemetriaDTO> telemetria = this.telemetriaService.getAllTelemetriaDTO();
+        return ResponseEntity.ok(telemetria);
     }
 }

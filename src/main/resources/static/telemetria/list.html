@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telemetria</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Registros de Telemetria</h1>
+        <div id="message-container"></div>
+        <div class="form-actions" style="justify-content: flex-start; margin-bottom: 20px;">
+            <a href="create.html" class="button button-success">Registrar Nova Telemetria</a>
+            <a href="../dashboard.html" class="button button-secondary">Voltar ao Dashboard</a>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID Máquina</th>
+                    <th>Sensor Nível Baixo</th>
+                    <th>Pressão Hidráulica</th>
+                    <th>Temperatura Óleo</th>
+                    <th>Ciclos Operação</th>
+                    <th>Vibração</th>
+                    <th>Data/Hora Coleta</th>
+                    <th>Nome Sensor</th>
+                    <th>Máquina Ligada</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="telemetrias-table-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadTelemetrias();
+        });
+
+        async function loadTelemetrias() {
+            const tableBody = document.getElementById('telemetrias-table-body');
+            tableBody.innerHTML = '<tr><td colspan="11" style="text-align: center;">Carregando...</td></tr>';
+            try {
+                // Assumindo um endpoint /telemetria/all para listar tudo
+                const telemetrias = await fetchData('/telemetria/all');
+                tableBody.innerHTML = '';
+
+                if (telemetrias && telemetrias.length > 0) {
+                    telemetrias.forEach(telemetria => {
+                        const row = tableBody.insertRow();
+                        row.insertCell().textContent = telemetria.id;
+                        row.insertCell().textContent = telemetria.idMaquina;
+                        row.insertCell().textContent = telemetria.sensorNivelBaixo ? 'Sim' : 'Não';
+                        row.insertCell().textContent = telemetria.pressaoHidraulica;
+                        row.insertCell().textContent = telemetria.temperaturaOleo;
+                        row.insertCell().textContent = telemetria.ciclosOperacao;
+                        row.insertCell().textContent = telemetria.vibracao;
+                        row.insertCell().textContent = telemetria.dataHoraColeta ? new Date(telemetria.dataHoraColeta).toLocaleString() : 'N/A';
+                        row.insertCell().textContent = telemetria.nomeSensor;
+                        row.insertCell().textContent = telemetria.maquinaLigada ? 'Sim' : 'Não';
+
+                        const actionsCell = row.insertCell();
+                        actionsCell.className = 'table-actions';
+
+                        const viewButton = document.createElement('a');
+                        viewButton.href = `details.html?idTelemetria=${telemetria.id}`;
+                        viewButton.className = 'button button-info';
+                        viewButton.textContent = 'Ver';
+                        actionsCell.appendChild(viewButton);
+
+                        const editButton = document.createElement('a');
+                        editButton.href = `edit.html?idTelemetria=${telemetria.id}`;
+                        editButton.className = 'button button-primary';
+                        editButton.textContent = 'Editar';
+                        actionsCell.appendChild(editButton);
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'button button-danger';
+                        deleteButton.textContent = 'Excluir';
+                        deleteButton.onclick = () => deleteTelemetria(telemetria.id);
+                        actionsCell.appendChild(deleteButton);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="11" style="text-align: center;">Nenhum registro de telemetria.</td></tr>';
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar telemetrias:', error);
+                tableBody.innerHTML = '<tr><td colspan="11" style="text-align: center; color: var(--danger-color);">Erro ao carregar dados.</td></tr>';
+                displayMessage(`Erro ao carregar telemetrias: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteTelemetria(id) {
+            if (confirm(`Tem certeza que deseja excluir a telemetria com ID ${id}?`)) {
+                try {
+                    const message = await deleteData('/telemetria', id);
+                    displayMessage(message, 'success');
+                    await loadTelemetrias();
+                } catch (error) {
+                    displayMessage(`Erro ao excluir telemetria: ${error.message}`, 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

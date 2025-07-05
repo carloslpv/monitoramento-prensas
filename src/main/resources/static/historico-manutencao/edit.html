@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Histórico de Manutenção</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Histórico de Manutenção</h1>
+        <div id="message-container"></div>
+
+        <form id="edit-manutencao-form">
+            <div class="form-group" style="display: none;">
+                <label for="id">ID do Histórico:</label>
+                <input type="number" id="id" name="id" readonly>
+            </div>
+            <div class="form-group">
+                <label for="idMaquina">ID da Máquina:</label>
+                <input type="number" id="idMaquina" name="idMaquina" required>
+            </div>
+            <div class="form-group">
+                <label for="tipoManutencao">Tipo de Manutenção:</label>
+                <input type="text" id="tipoManutencao" name="tipoManutencao" required>
+            </div>
+            <div class="form-group">
+                <label for="acaoRealizada">Ação Realizada:</label>
+                <textarea id="acaoRealizada" name="acaoRealizada" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="dataHoraManutencao">Data/Hora da Manutenção:</label>
+                <input type="datetime-local" id="dataHoraManutencao" name="dataHoraManutencao" required>
+            </div>
+            <div class="form-group">
+                <label for="tempoManutencaoMin">Tempo de Manutenção (Minutos):</label>
+                <input type="number" id="tempoManutencaoMin" name="tempoManutencaoMin" required>
+            </div>
+            <div class="form-group">
+                <label for="idHistoricoFalha">ID do Histórico de Falha (opcional):</label>
+                <input type="number" id="idHistoricoFalha" name="idHistoricoFalha">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="button button-primary">Salvar Alterações</button>
+                <a href="list.html" class="button button-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const manutencaoId = urlParams.get('idHistoricoManutencao'); // Nome do parâmetro no seu controller
+
+            if (manutencaoId) {
+                try {
+                    const manutencao = await fetchData(`/historico-manutencao?idHistoricoManutencao=${manutencaoId}`);
+                    document.getElementById('id').value = manutencao.id;
+                    document.getElementById('idMaquina').value = manutencao.idMaquina;
+                    document.getElementById('tipoManutencao').value = manutencao.tipoManutencao;
+                    document.getElementById('acaoRealizada').value = manutencao.acaoRealizada;
+                    document.getElementById('dataHoraManutencao').value = formatDateTimeForInput(manutencao.dataHoraManutencao);
+                    document.getElementById('tempoManutencaoMin').value = manutencao.tempoManutencaoMin;
+                    document.getElementById('idHistoricoFalha').value = manutencao.idHistoricoFalha || '';
+                } catch (error) {
+                    displayMessage(`Erro ao carregar dados do histórico de manutenção: ${error.message}`, 'error');
+                }
+            } else {
+                displayMessage('ID do histórico de manutenção não fornecido.', 'error');
+            }
+        });
+
+        document.getElementById('edit-manutencao-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const manutencaoData = {
+                id: parseInt(document.getElementById('id').value),
+                idMaquina: parseInt(document.getElementById('idMaquina').value),
+                tipoManutencao: document.getElementById('tipoManutencao').value,
+                acaoRealizada: document.getElementById('acaoRealizada').value,
+                dataHoraManutencao: parseDateTimeFromInput(document.getElementById('dataHoraManutencao').value),
+                tempoManutencaoMin: parseInt(document.getElementById('tempoManutencaoMin').value),
+                idHistoricoFalha: document.getElementById('idHistoricoFalha').value ? parseInt(document.getElementById('idHistoricoFalha').value) : null
+            };
+
+            try {
+                const message = await putData('/historico-manutencao', manutencaoData);
+                displayMessage(message, 'success');
+            } catch (error) {
+                displayMessage(`Erro ao atualizar histórico de manutenção: ${error.message}`, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

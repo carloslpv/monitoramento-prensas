@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Manutenção</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Histórico de Manutenção</h1>
+        <div id="message-container"></div>
+        <div class="form-actions" style="justify-content: flex-start; margin-bottom: 20px;">
+            <a href="create.html" class="button button-success">Registrar Nova Manutenção</a>
+            <a href="../dashboard.html" class="button button-secondary">Voltar ao Dashboard</a>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID Máquina</th>
+                    <th>Tipo</th>
+                    <th>Ação</th>
+                    <th>Data/Hora</th>
+                    <th>Tempo (Min)</th>
+                    <th>ID Falha</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="manutencoes-table-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadHistoricoManutencoes();
+        });
+
+        async function loadHistoricoManutencoes() {
+            const tableBody = document.getElementById('manutencoes-table-body');
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Carregando...</td></tr>';
+            try {
+                // Novamente, assumindo um endpoint /historico-manutencao/all para listar tudo
+                const manutencoes = await fetchData('/historico-manutencao/all');
+                tableBody.innerHTML = '';
+
+                if (manutencoes && manutencoes.length > 0) {
+                    manutencoes.forEach(manutencao => {
+                        const row = tableBody.insertRow();
+                        row.insertCell().textContent = manutencao.id;
+                        row.insertCell().textContent = manutencao.idMaquina;
+                        row.insertCell().textContent = manutencao.tipoManutencao;
+                        row.insertCell().textContent = manutencao.acaoRealizada;
+                        row.insertCell().textContent = manutencao.dataHoraManutencao ? new Date(manutencao.dataHoraManutencao).toLocaleString() : 'N/A';
+                        row.insertCell().textContent = manutencao.tempoManutencaoMin;
+                        row.insertCell().textContent = manutencao.idHistoricoFalha || 'N/A';
+
+                        const actionsCell = row.insertCell();
+                        actionsCell.className = 'table-actions';
+
+                        const viewButton = document.createElement('a');
+                        viewButton.href = `details.html?idHistoricoManutencao=${manutencao.id}`;
+                        viewButton.className = 'button button-info';
+                        viewButton.textContent = 'Ver';
+                        actionsCell.appendChild(viewButton);
+
+                        const editButton = document.createElement('a');
+                        editButton.href = `edit.html?idHistoricoManutencao=${manutencao.id}`;
+                        editButton.className = 'button button-primary';
+                        editButton.textContent = 'Editar';
+                        actionsCell.appendChild(editButton);
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'button button-danger';
+                        deleteButton.textContent = 'Excluir';
+                        deleteButton.onclick = () => deleteHistoricoManutencao(manutencao.id);
+                        actionsCell.appendChild(deleteButton);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Nenhum histórico de manutenção registrado.</td></tr>';
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar histórico de manutenções:', error);
+                tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--danger-color);">Erro ao carregar dados.</td></tr>';
+                displayMessage(`Erro ao carregar histórico de manutenções: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteHistoricoManutencao(id) {
+            if (confirm(`Tem certeza que deseja excluir o histórico de manutenção com ID ${id}?`)) {
+                try {
+                    const message = await deleteData('/historico-manutencao', id);
+                    displayMessage(message, 'success');
+                    await loadHistoricoManutencoes();
+                } catch (error) {
+                    displayMessage(`Erro ao excluir histórico de manutenção: ${error.message}`, 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

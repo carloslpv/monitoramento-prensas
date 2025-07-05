@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Telemetria</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes da Telemetria</h1>
+        <div id="message-container"></div>
+
+        <div class="card" id="telemetria-details-card">
+            </div>
+
+        <div class="form-actions">
+            <a href="list.html" class="button button-secondary">Voltar para a Lista</a>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const telemetriaId = urlParams.get('idTelemetria');
+            const detailsCard = document.getElementById('telemetria-details-card');
+
+            if (telemetriaId) {
+                try {
+                    const telemetria = await fetchData(`/telemetria?idTelemetria=${telemetriaId}`);
+                    detailsCard.innerHTML = `
+                        <div class="card-header">Telemetria ID: ${telemetria.id}</div>
+                        <div class="card-body">
+                            <p><strong>ID Máquina:</strong> ${telemetria.idMaquina}</p>
+                            <p><strong>Sensor Nível Baixo:</strong> ${telemetria.sensorNivelBaixo ? 'Sim' : 'Não'}</p>
+                            <p><strong>Pressão Hidráulica:</strong> ${telemetria.pressaoHidraulica}</p>
+                            <p><strong>Temperatura Óleo:</strong> ${telemetria.temperaturaOleo}</p>
+                            <p><strong>Ciclos de Operação:</strong> ${telemetria.ciclosOperacao}</p>
+                            <p><strong>Vibração:</strong> ${telemetria.vibracao}</p>
+                            <p><strong>Data/Hora da Coleta:</strong> ${telemetria.dataHoraColeta ? new Date(telemetria.dataHoraColeta).toLocaleString() : 'N/A'}</p>
+                            <p><strong>Nome do Sensor:</strong> ${telemetria.nomeSensor}</p>
+                            <p><strong>Máquina Ligada:</strong> ${telemetria.maquinaLigada ? 'Sim' : 'Não'}</p>
+                        </div>
+                    `;
+                } catch (error) {
+                    detailsCard.innerHTML = `<p class="message error">Erro ao carregar detalhes da telemetria: ${error.message}</p>`;
+                    displayMessage(`Erro ao carregar detalhes da telemetria: ${error.message}`, 'error');
+                }
+            } else {
+                detailsCard.innerHTML = `<p class="message error">ID da telemetria não fornecido.</p>`;
+                displayMessage('ID da telemetria não fornecido.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

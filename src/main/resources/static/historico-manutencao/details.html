@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Histórico de Manutenção</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes do Histórico de Manutenção</h1>
+        <div id="message-container"></div>
+
+        <div class="card" id="manutencao-details-card">
+            </div>
+
+        <div class="form-actions">
+            <a href="list.html" class="button button-secondary">Voltar para a Lista</a>
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const manutencaoId = urlParams.get('idHistoricoManutencao');
+            const detailsCard = document.getElementById('manutencao-details-card');
+
+            if (manutencaoId) {
+                try {
+                    const manutencao = await fetchData(`/historico-manutencao?idHistoricoManutencao=${manutencaoId}`);
+                    detailsCard.innerHTML = `
+                        <div class="card-header">Histórico de Manutenção ID: ${manutencao.id}</div>
+                        <div class="card-body">
+                            <p><strong>ID Máquina:</strong> ${manutencao.idMaquina}</p>
+                            <p><strong>Tipo de Manutenção:</strong> ${manutencao.tipoManutencao}</p>
+                            <p><strong>Ação Realizada:</strong> ${manutencao.acaoRealizada}</p>
+                            <p><strong>Data/Hora da Manutenção:</strong> ${manutencao.dataHoraManutencao ? new Date(manutencao.dataHoraManutencao).toLocaleString() : 'N/A'}</p>
+                            <p><strong>Tempo (Minutos):</strong> ${manutencao.tempoManutencaoMin}</p>
+                            <p><strong>ID Histórico de Falha:</strong> ${manutencao.idHistoricoFalha || 'N/A'}</p>
+                        </div>
+                    `;
+                } catch (error) {
+                    detailsCard.innerHTML = `<p class="message error">Erro ao carregar detalhes do histórico de manutenção: ${error.message}</p>`;
+                    displayMessage(`Erro ao carregar detalhes do histórico de manutenção: ${error.message}`, 'error');
+                }
+            } else {
+                detailsCard.innerHTML = `<p class="message error">ID do histórico de manutenção não fornecido.</p>`;
+                displayMessage('ID do histórico de manutenção não fornecido.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
