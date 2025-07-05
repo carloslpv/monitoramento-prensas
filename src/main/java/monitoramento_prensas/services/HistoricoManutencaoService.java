@@ -43,7 +43,7 @@ public class HistoricoManutencaoService {
     public void createHistoricoManutencao(HistoricoManutencaoDTO dto) {
         try {
             final Maquina maquina = this.maquinaService.getMaquina(dto.idMaquina());
-            HistoricoFalhas historicoFalha = new HistoricoFalhas();
+            HistoricoFalhas historicoFalha = null;
             if (dto.idHistoricoFalha() != null) {
                 historicoFalha = this.historicoFalhasService.getFalha(dto.idHistoricoFalha());
             }

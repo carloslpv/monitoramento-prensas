@@ -68,7 +68,7 @@ public class HistoricoManutencao {
                 this.acaoRealizada,
                 this.dataHoraManutencao,
                 this.tempoManutencaoMin,
-                this.historicoFalha.getId()
+                this.historicoFalha != null ? this.historicoFalha.getId() : null
         );
     }
 }

@@ -32,7 +32,7 @@ public class HistoricoManutencaoController {
     public ResponseEntity<String> createHistoricoManutencao(@RequestBody HistoricoManutencaoDTO dto) {
         try {
             this.historicoManutencaoService.createHistoricoManutencao(dto);
-            return ResponseEntity.ok("Máquina cadastrada com sucesso.");
+            return ResponseEntity.ok("Manutenção cadastrada com sucesso.");
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
