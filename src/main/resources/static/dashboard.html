@@ -6,64 +6,203 @@
     <title>Dashboard de Monitoramento de Prensas</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Dashboard de Monitoramento de Prensas</h1>
-        <div id="message-container"></div>
+<div class="container">
+    <h1>Dashboard de Monitoramento de Prensas</h1>
+    <div id="message-container"></div>
 
-        <nav style="margin-bottom: 30px; text-align: center;">
-            <a href="maquinas/list.html" class="button button-secondary">Gerenciar Máquinas</a>
-            <a href="historico-falhas/list.html" class="button button-secondary">Gerenciar Falhas</a>
-            <a href="historico-manutencao/list.html" class="button button-secondary">Gerenciar Manutenção</a>
-            <a href="telemetria/list.html" class="button button-secondary">Gerenciar Telemetria</a>
-        </nav>
+    <nav style="margin-bottom: 30px; text-align: center;">
+        <a href="maquinas/list.html" class="button button-secondary">Gerenciar Máquinas</a>
+        <a href="historico-falhas/list.html" class="button button-secondary">Gerenciar Falhas</a>
+        <a href="historico-manutencao/list.html" class="button button-secondary">Gerenciar Manutenção</a>
+        <a href="telemetria/list.html" class="button button-secondary">Gerenciar Telemetria</a>
+    </nav>
 
-        <div class="dashboard-grid">
-            <div class="card">
-                <div class="card-header">Total de Máquinas</div>
-                <div class="card-body">
-                    <p id="total-maquinas" style="font-size: 2.5em; font-weight: bold; text-align: center; color: var(--primary-color);">0</p>
-                </div>
-            </div>
+    <div class="filter-section" style="margin-bottom: 30px; text-align: center; display: flex; justify-content: center; align-items: center; gap: 15px;">
+        <label for="machine-select" style="font-weight: bold;">Filtrar por Máquina:</label>
+        <select id="machine-select" class="form-group" style="width: auto;">
+            <option value="all">Todas as Máquinas</option>
+        </select>
 
-            <div class="card">
-                <div class="card-header">Falhas Recentes (Últimos 30 Dias)</div>
-                <div class="card-body">
-                    <canvas id="falhasPorTipoChart"></canvas>
-                </div>
-            </div>
+        <label for="start-date" style="font-weight: bold;">Data Inicial:</label>
+        <input type="date" id="start-date" class="form-group" style="width: auto;">
 
-            <div class="card">
-                <div class="card-header">Tempo Total de Manutenção por Máquina</div>
-                <div class="card-body">
-                    <canvas id="tempoManutencaoChart"></canvas>
-                </div>
-            </div>
+        <label for="end-date" style="font-weight: bold;">Data Final:</label>
+        <input type="date" id="end-date" class="form-group" style="width: auto;">
 
-            <div class="card">
-                <div class="card-header">Status das Máquinas</div>
-                <div class="card-body">
-                    <canvas id="maquinasStatusChart"></canvas>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">Média de Temperatura do Óleo por Máquina</div>
-                <div class="card-body">
-                    <canvas id="temperaturaOleoChart"></canvas>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">Ciclos de Operação (Top 5)</div>
-                <div class="card-body">
-                    <canvas id="ciclosOperacaoChart"></canvas>
-                </div>
-            </div>
-        </div>
+        <button id="apply-filter" class="button button-primary">Aplicar Filtro</button>
     </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/dashboard.js"></script> </body>
+    <div class="dashboard-grid">
+        <div class="card small-card">
+            <div class="card-header">Total de Máquinas</div>
+            <div class="card-body">
+                <p id="total-maquinas" class="metric-value">0</p>
+            </div>
+        </div>
+
+        <div class="card small-card">
+            <div class="card-header">Última Pressão Hidráulica</div>
+            <div class="card-body">
+                <p id="latest-pressure" class="metric-value">N/A</p>
+            </div>
+        </div>
+
+        <div class="card small-card">
+            <div class="card-header">Média Temp. Óleo (Últ. 5)</div>
+            <div class="card-body">
+                <p id="avg-oil-temp" class="metric-value">N/A</p>
+            </div>
+        </div>
+
+        <div class="card small-card">
+            <div class="card-header">Vibração Atual</div>
+            <div class="card-body">
+                <p id="latest-vibration" class="metric-value">N/A</p>
+            </div>
+        </div>
+
+        <div class="card wide-card">
+            <div class="card-header">Ocorrência de Falhas ao Longo do Tempo</div>
+            <div class="card-body">
+                <canvas id="falhasPorDataChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card wide-card">
+            <div class="card-header">Tendências de Telemetria (Pressão, Temperatura, Vibração)</div>
+            <div class="card-body">
+                <canvas id="telemetryTrendsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Principais Falhas (Top 5)</div>
+            <div class="card-body">
+                <canvas id="top5FalhasChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Falhas Recentes (Por Tipo)</div>
+            <div class="card-body">
+                <canvas id="falhasPorTipoChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Tempo Total de Manutenção por Máquina</div>
+            <div class="card-body">
+                <canvas id="tempoManutencaoChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Tempo de Manutenção por Mês</div>
+            <div class="card-body">
+                <canvas id="tempoManutencaoPorMesChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Status das Máquinas</div>
+            <div class="card-body">
+                <canvas id="maquinasStatusChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Ciclos de Operação do Dia</div>
+            <div class="card-body">
+                <canvas id="ciclosOperacaoChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Média de Temperatura do Óleo por Máquina</div>
+            <div class="card-body">
+                <canvas id="temperaturaOleoChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Média de Vibração por Máquina</div>
+            <div class="card-body">
+                <canvas id="vibracaoMediaChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Eventos de Sensor de Nível Baixo</div>
+            <div class="card-body">
+                <canvas id="sensorNivelBaixoChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 300px é um bom tamanho base */
+        gap: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* Garante que o conteúdo não vaze */
+    }
+
+    .card.wide-card {
+        grid-column: 1 / -1; /* Ocupa toda a largura da grade */
+    }
+
+    .card.small-card {
+        /* Tamanho padrão, pode ser ajustado se necessário */
+        min-height: 120px; /* Altura mínima para cards pequenos */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .card-header {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+        text-align: center;
+    }
+
+    .card-body {
+        flex-grow: 1; /* Permite que o corpo do card preencha o espaço restante */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .metric-value {
+        font-size: 2.2em; /* Tamanho maior para os valores métricos */
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    canvas {
+        max-width: 100%;
+        height: 250px; /* Altura padrão para gráficos */
+        /* Pode usar !important se necessário para sobrescrever estilos inline do Chart.js */
+    }
+</style>
+</body>
 </html>
