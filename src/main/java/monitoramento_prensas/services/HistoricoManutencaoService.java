@@ -9,7 +9,9 @@ import monitoramento_prensas.models.dtos.HistoricoManutencaoDTO;
 import monitoramento_prensas.repositories.HistoricoManutencaoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service de {@link HistoricoManutencao}.
@@ -129,5 +131,14 @@ public class HistoricoManutencaoService {
         } catch (Exception e) {
             throw new PersistenceException("Não foi possível remover o histórico de manutenção. Verifique!");
         }
+    }
+
+    /**
+     * Retorna uma lista de {@link HistoricoManutencaoDTO}
+     *
+     * @return
+     */
+    public List<HistoricoManutencaoDTO> getAllTelemetriaDTO() {
+        return this.historicoManutencaoRepository.findAll().stream().map(HistoricoManutencao::toDTO).collect(Collectors.toList());
     }
 }
