@@ -39,16 +39,15 @@ public class MaquinaController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getMaquina(@RequestParam Integer idMaquina) {
+    public ResponseEntity<Object> getMaquina(@RequestParam("idMaquina") Integer idMaquina) {
         try {
-            final MaquinaDTO dto = this.maquinaService.getMaquinaDTO(idMaquina);
+            MaquinaDTO dto = this.maquinaService.getMaquinaDTO(idMaquina);
             return ResponseEntity.ok(dto);
         } catch (ObjetoNaoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Algo deu errado ao tentar buscar o cadastro da máquina. Tente novamente");
+                    .body("Erro ao buscar máquina.");
         }
     }
 
