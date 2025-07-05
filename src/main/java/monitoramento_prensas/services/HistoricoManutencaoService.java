@@ -138,7 +138,7 @@ public class HistoricoManutencaoService {
      *
      * @return
      */
-    public List<HistoricoManutencaoDTO> getAllTelemetriaDTO() {
+    public List<HistoricoManutencaoDTO> getAllHistoricoManutencaoDTO() {
         return this.historicoManutencaoRepository.findAll().stream().map(HistoricoManutencao::toDTO).collect(Collectors.toList());
     }
 }

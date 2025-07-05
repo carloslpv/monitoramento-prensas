@@ -118,7 +118,7 @@ public class HistoricoFalhasService {
      *
      * @return
      */
-    public List<HistoricoFalhasDTO> getAllTelemetriaDTO() {
+    public List<HistoricoFalhasDTO> getAllHistoricoFalhasDTO() {
         return this.historicoFalhasRepository.findAll().stream().map(HistoricoFalhas::toDTO).collect(Collectors.toList());
     }
 }
