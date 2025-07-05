@@ -831,65 +831,77 @@ function renderTempoManutencaoPorMesChart(historicoManutencao) {
     });
 }
 
-
 function renderTop5FalhasChart(historicoFalhas) {
+    // 1. Obtém o contexto do canvas para desenhar o gráfico
     const ctx = document.getElementById('top5FalhasChart').getContext('2d');
 
+    // 2. Conta a ocorrência de cada tipo de falha
     const falhasCount = historicoFalhas.reduce((acc, falha) => {
-        const tipoFalhaNormalizado = falha.tipoFalha.trim(); // Garante normalização
-        acc[tipoFalhaNormalizado] = (acc[tipoFalhoNormalizado] || 0) + 1;
+        const tipoFalhaNormalizado = falha.tipoFalha.trim(); // Remove espaços extras para normalizar
+        // CORREÇÃO: troquei 'tipoFalhoNormalizado' por 'tipoFalhaNormalizado'
+        acc[tipoFalhaNormalizado] = (acc[tipoFalhaNormalizado] || 0) + 1;
         return acc;
     }, {});
 
+    // 3. Ordena as falhas por ocorrência (do maior para o menor) e pega as Top 5
     const sortedFalhas = Object.entries(falhasCount)
         .sort(([,a],[,b]) => b - a)
-        .slice(0, 5); // Top 5
+        .slice(0, 5); // Pega apenas os 5 primeiros
 
+    // 4. Prepara os rótulos (nomes das falhas) e os dados (quantidades) para o gráfico
     const labels = sortedFalhas.map(entry => entry[0]);
     const data = sortedFalhas.map(entry => entry[1]);
 
+    // 5. Destroi o gráfico existente se houver (para evitar duplicatas ao atualizar)
+    if (charts.top5FalhasChart) {
+        charts.top5FalhasChart.destroy();
+    }
+
+    // 6. Cria e renderiza o novo gráfico de barras
     charts.top5FalhasChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'bar', // Tipo de gráfico: barras
         data: {
-            labels: labels,
+            labels: labels, // Rótulos no eixo X
             datasets: [{
-                label: 'Número de Ocorrências',
-                data: data,
-                backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
+                label: 'Número de Ocorrências', // Legenda do dataset
+                data: data, // Dados para as barras
+                backgroundColor: 'rgba(255, 99, 132, 0.6)', // Cor de preenchimento das barras
+                borderColor: 'rgba(255, 99, 132, 1)', // Cor da borda das barras
+                borderWidth: 1 // Largura da borda
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            responsive: true, // Torna o gráfico responsivo
+            maintainAspectRatio: false, // Permite que o gráfico não mantenha a proporção original
             scales: {
                 y: {
-                    beginAtZero: true,
+                    beginAtZero: true, // Começa o eixo Y em zero
                     title: {
                         display: true,
-                        text: 'Quantidade'
+                        text: 'Quantidade' // Título do eixo Y
                     },
                     ticks: {
-                        precision: 0
+                        precision: 0 // Mostra apenas números inteiros no eixo Y
                     }
                 },
                 x: {
                     title: {
                         display: true,
-                        text: 'Tipo de Falha'
+                        text: 'Tipo de Falha' // Título do eixo X
                     }
                 }
             },
             plugins: {
                 legend: {
-                    display: false
+                    display: false // Oculta a legenda do dataset
                 },
                 title: {
                     display: true,
+                    // Título dinâmico: se não houver falhas, mostra uma mensagem, caso contrário, o título padrão
                     text: labels.length === 0 ? 'Nenhuma falha para exibir' : 'Principais Falhas das Máquinas (Top 5)'
                 }
             }
         }
     });
 }
+
