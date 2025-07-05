@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 02/07/2025
  */
 @RestController
-@RequestMapping(name = "/telemetria")
+@RequestMapping("/telemetria")
 public class TelemetriaController {
 
     private TelemetriaService telemetriaService;
