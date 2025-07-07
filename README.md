@@ -106,7 +106,7 @@ Objetivos do modelo:
   - Ajustar o modelo para melhorar o desempenho caso necessário.
 
 5. **Integrar com o Sistema:**
-  - Hospedar o modelo treinado em ambiente Oracle OCI.
+  - Hospedar o modelo treinado em ambiente Google Cloud.
   - Implementar uma API RESTful para integrar o modelo com a aplicação web.
 
 6. **Monitorar e Atualizar o Modelo:**
