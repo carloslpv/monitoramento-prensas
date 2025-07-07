@@ -52,7 +52,7 @@ Utilização de telemetria por meio dos seguintes sensores:
 
 ### Periodicidade de Coleta
 
-- A cada minuto coleta os dados de todos os sensores e insere em telemetria, apenas quando a máquina estiver ligada.
+- A cada minuto coleta os dados de todos os sensores e insere em telemetria, apenas quando a máquina estiver ligada. Essa coleta não foi implementada, pois o sistema atual é focado na visualização dos dados, para isso se faz necessário a implementação de um dispositivo in loco conectado as máquinas. Para simulação foram inseridos dados gerados manualmente.
 - Os dados de manutenção e falha são inseridos quando ocorre algum evento relacionado na fábrica.
 
 ### Escolha do Banco de Dados
@@ -64,10 +64,18 @@ Utilização de telemetria por meio dos seguintes sensores:
 
 ### Escolha da Plataforma de Nuvem
 
-**Oracle OCI:**
-- Baixo custo operacional
-- Indicado para ambientes leves e dev/testes
+**Google Cloud:**
+- Custo beneficio
+- Facilidade de gerencialmente 
 - Free tier robusto
+
+### Tecnologias Utilizadas no Desenvolvimento do Projeto
+
+**Linguagem de Programação**
+- Java e Spring Boot: Devido a sua performance e conhecimento dos integrantes do grupo
+
+**Biblioteca**
+- Chart.js: Devido facilidade de utilização para a visualização dos dados
 
 ### Modelo de Previsão – Machine Learning / Inteligência Artificial
 
@@ -109,4 +117,6 @@ Objetivos do modelo:
 ---
 
 Desenvolvido para otimizar operações e reduzir custos com manutenção corretiva em prensas hidráulicas através de soluções tecnológicas e inteligência artificial.
+
+
 
