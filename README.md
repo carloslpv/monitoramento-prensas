@@ -1,5 +1,7 @@
 # Monitoramento de Prensas Hidráulicas
 
+Integrantes: Carlos Elian Lopes Vieira, Pedro Bobella Meneghini, Vinicius Rinas Begnini.
+
 ## Descrição do Problema
 
 Uma metalúrgica que produz peças para a indústria automotiva está enfrentando paradas não planejadas em suas prensas hidráulicas. A falha inesperada de vedações e mangueiras causa interrupções na produção, atrasos nas entregas e altos custos com manutenção corretiva.
