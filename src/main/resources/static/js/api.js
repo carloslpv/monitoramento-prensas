@@ -1,6 +1,6 @@
 // js/api.js
 
-const API_BASE_URL = 'http://localhost:8080'; // Altere se o seu backend estiver em outra porta/endereço
+const API_BASE_URL = ''; // Altere se o seu backend estiver em outra porta/endereço
 
 async function fetchData(url) {
     try {
