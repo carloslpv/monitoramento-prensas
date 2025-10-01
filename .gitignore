@@ -35,3 +35,4 @@ build/
 ### CONFIGURACOES LOCAIS ###
 .env
 .env.*
+target/
